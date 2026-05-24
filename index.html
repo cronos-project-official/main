@@ -61,17 +61,6 @@
     <div class="news-grid" id="news-grid"></div>
   </section>
 
-  <div class="divider"></div>
-
-  <!-- PARTNER -->
-  <section id="partner">
-    <div class="section-center rv">
-      <div class="section-label">// Alliance</div>
-      <h2 class="section-title">PARTNER</h2>
-      <p class="section-desc">พันธมิตรและผู้สนับสนุน Cronos Project ขอบคุณทุกคน</p>
-    </div>
-    <div class="partner-grid" id="partner-grid"></div>
-  </section>
 
   <footer>
     <div class="footer-logo" onclick="goPage('home')"><img src="logo.webp" alt="Cronos Project"/></div>
@@ -409,7 +398,6 @@ window.partnerData = [];
 snap.forEach(d => window.partnerData.push(d.data()));
 window.partnerData.sort((a,b)=>a.id-b.id);
 if(typeof renderPartners==='function') renderPartners();
-if(typeof renderPartnersPage==='function') renderPartnersPage();
 if(typeof renderAdminPartners==='function') renderAdminPartners();
 });
 async function loadCounters(){
@@ -481,7 +469,7 @@ ${imgSection}
 revealAll('#news-grid .rv');
 }
 function renderPartners(){
-const grid = document.getElementById('partner-grid');
+const grid = document.getElementById('partner-grid-page');
 const ICONS = {
 yt: {cls:'p-link-yt', svg:'<svg viewBox="0 0 24 24" fill="white" width="13" height="13"><path d="M23.5 6.2s-.2-1.6-.9-2.3c-.9-.9-1.9-.9-2.3-1C17.4 2.7 12 2.7 12 2.7s-5.4 0-8.3.2c-.5.1-1.5.1-2.3 1-.7.7-.9 2.3-.9 2.3S.2 8 .2 9.8v1.7c0 1.8.3 3.6.3 3.6s.2 1.6.9 2.3c.9.9 2 .9 2.5 1 1.8.2 7.6.2 7.6.2s5.4 0 8.3-.3c.5-.1 1.5-.1 2.3-1 .7-.7.9-2.3.9-2.3s.3-1.8.3-3.6V9.8C23.8 8 23.5 6.2 23.5 6.2zM9.7 15.5V8.5l6.3 3.5-6.3 3.5z"/></svg>'},
 dc: {cls:'p-link-dc', svg:'<svg viewBox="0 0 24 24" fill="white" width="13" height="13"><path d="M20.3 4.4A19.7 19.7 0 0015 3c-.2.4-.5.9-.7 1.3a18.3 18.3 0 00-4.6 0A13 13 0 009 3a19.7 19.7 0 00-5.3 1.4C1.3 8.3.7 12 1 15.7a19.9 19.9 0 006 3 15 15 0 001.3-2.1 13 13 0 01-2-.9l.5-.4a14.2 14.2 0 0012.4 0l.5.4a13 13 0 01-2 .9 15 15 0 001.3 2.1 19.8 19.8 0 006-3c.3-4.2-.7-7.9-3.7-11.3zM8.5 13.5c-1 0-1.8-.9-1.8-2s.8-2 1.8-2 1.8.9 1.8 2-.8 2-1.8 2zm7 0c-1 0-1.8-.9-1.8-2s.8-2 1.8-2 1.8.9 1.8 2-.8 2-1.8 2z"/></svg>'},
@@ -570,7 +558,13 @@ document.querySelectorAll('.nav-links a').forEach(a=>a.classList.remove('nav-act
 const map={home:'nl-home',download:'nl-dl',partner:'nl-partner'};
 if(map[name]) document.getElementById(map[name])?.classList.add('nav-active');
 setTimeout(()=>{document.querySelectorAll('#page-'+name+' .rv').forEach(el=>el.classList.add('vis'));},80);
+window.location.hash = name === 'home' ? '' : name;
 }
+// Handle hash on load
+(function(){
+  const hash = window.location.hash.replace('#','');
+  if(hash && document.getElementById('page-'+hash)) goPage(hash);
+})();
 function later(id){setTimeout(()=>scrollSec(id),120);}
 function scrollSec(id){const el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth'});}
 const ro=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis');});},{threshold:.1});
