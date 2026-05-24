@@ -31,7 +31,7 @@
     <li><a onclick="goPage('home')" id="nl-home" class="nav-active">Home</a></li>
     <li><a onclick="goPage('home');later('project')" id="nl-project">Project</a></li>
     <li><a onclick="goPage('download')" id="nl-dl" class="nav-btn">⬇ Mod Download</a></li>
-    <li><a onclick="goPage('home');later('partner')" id="nl-partner">Partner</a></li>
+    <li><a onclick="goPage('partner')" id="nl-partner">Partner</a></li>
   </ul>
 </nav>
 
@@ -409,6 +409,7 @@ window.partnerData = [];
 snap.forEach(d => window.partnerData.push(d.data()));
 window.partnerData.sort((a,b)=>a.id-b.id);
 if(typeof renderPartners==='function') renderPartners();
+if(typeof renderPartnersPage==='function') renderPartnersPage();
 if(typeof renderAdminPartners==='function') renderAdminPartners();
 });
 async function loadCounters(){
@@ -539,6 +540,13 @@ ${n.img ? `<img class="admin-item-img" src="${n.img}" alt=""/>` : `<div class="a
 </div>
 </div>`).join('');
 }
+function renderPartnersPage(){
+const g=document.getElementById('partner-grid-page');
+if(!g)return;
+if(!window.partnerData||!window.partnerData.length){g.innerHTML='<p style="color:var(--gray);text-align:center;padding:2rem;">ยังไม่มีพาร์ทเนอร์</p>';return;}
+g.innerHTML=window.partnerData.map(p=>renderPartnerCard(p)).join('');
+g.querySelectorAll('img').forEach(img=>{img.onclick=()=>openLightbox(img.src);});
+}
 function renderAdminPartners(){
 const partnerData = window.partnerData;
 document.getElementById('admin-partner-list').innerHTML = partnerData.map(p=>`
@@ -559,7 +567,7 @@ document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
 document.getElementById('page-'+name).classList.add('active');
 window.scrollTo(0,0);
 document.querySelectorAll('.nav-links a').forEach(a=>a.classList.remove('nav-active'));
-const map={home:'nl-home',download:'nl-dl'};
+const map={home:'nl-home',download:'nl-dl',partner:'nl-partner'};
 if(map[name]) document.getElementById(map[name])?.classList.add('nav-active');
 setTimeout(()=>{document.querySelectorAll('#page-'+name+' .rv').forEach(el=>el.classList.add('vis'));},80);
 }
@@ -961,5 +969,23 @@ if(btn){ btn.textContent='💾 บันทึก'; btn.disabled=false; }
 }
 </script>
 
+
+<div id="page-partner" class="page">
+  <div class="post-back-bar">
+    <button class="post-back-btn" onclick="goPage('home')">← กลับหน้าหลัก</button>
+  </div>
+  <section style="padding:70px 5vw 90px;">
+    <div class="section-center rv">
+      <div class="section-label">// Alliance</div>
+      <h2 class="section-title">PARTNER</h2>
+      <p class="section-desc">พันธมิตรและผู้สนับสนุน Cronos Project ขอบคุณทุกคน</p>
+    </div>
+    <div class="partner-grid" id="partner-grid-page"></div>
+  </section>
+  <footer>
+    <div class="footer-logo" onclick="goPage('home')"><img src="logo.webp" alt="Cronos Project"/></div>
+    <p class="footer-copy">© 2025 Cronos Project · จัดทำโดย cronos project นะจ๊ะ</p>
+  </footer>
+</div>
 </body>
 </html>
