@@ -508,7 +508,7 @@ ${links ? `<div class="p-links">${links}</div>` : ''}
 </div>
 </div>`;
 }).join('');
-revealAll('#partner-grid .rv');
+revealAll('#partner-grid-page .rv');
 }
 function revealAll(sel){
 setTimeout(()=>{document.querySelectorAll(sel).forEach(el=>el.classList.add('vis'));},80);
@@ -559,6 +559,7 @@ const map={home:'nl-home',download:'nl-dl',partner:'nl-partner'};
 if(map[name]) document.getElementById(map[name])?.classList.add('nav-active');
 setTimeout(()=>{document.querySelectorAll('#page-'+name+' .rv').forEach(el=>el.classList.add('vis'));},80);
 window.location.hash = name === 'home' ? '' : name;
+if(name === 'partner' && typeof renderPartners === 'function') renderPartners();
 }
 // Handle hash on load
 window.addEventListener('DOMContentLoaded', function(){
